@@ -2,6 +2,7 @@
 
 **Browser-Native Spatial 3D Digital Sculpting & Animation Studio with GPU-Accelerated Vertex Deformation**
 
+[![NPM Version](https://img.shields.io/npm/v/handforge.svg?style=flat-square)](https://www.npmjs.com/package/handforge)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](LICENSE)
 [![Framework: Next.js 16](https://img.shields.io/badge/Framework-Next.js%2016-black.svg)](https://nextjs.org/)
 [![Graphics: Three.js WebGPU](https://img.shields.io/badge/Graphics-Three.js%20WebGPU-049EF4.svg)](https://threejs.org/)
@@ -15,6 +16,17 @@
 HandForge is a browser-native, gesture-controlled 3D digital sculpting and animation studio. It couples WebGPU-accelerated vertex displacement pipelines with Google MediaPipe WebAssembly (WASM) skeletal tracking, enabling touchless surface sculpting across 66,000+ vertex meshes directly inside the browser's 60 FPS main execution loop without specialized hardware or cloud rendering servers.
 
 The application translates dual-hand skeletal knuckle coordinates into real-time sculpting actions—Push, Pull, Inflate, Smooth, Flatten, and Crease brushes—with adaptive One Euro Filter coordinate smoothing, Blender-style transform gizmos, keyframe animation timelines, and custom `.hf3d` project serialization.
+
+### Official NPM Package
+
+HandForge is published as an official modular, tree-shakable NPM library:
+
+```bash
+npm install handforge
+```
+
+- NPM Registry: [npmjs.com/package/handforge](https://www.npmjs.com/package/handforge)
+- NPM Library Repository: [github.com/code-dibyajyotirout/handforge-npm-package](https://github.com/code-dibyajyotirout/handforge-npm-package)
 
 ---
 
