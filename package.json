@@ -1,0 +1,46 @@
+{
+  "name": "handforge",
+  "version": "1.0.0",
+  "description": "Browser-Native Spatial 3D Digital Sculpting & Animation Studio with GPU-Accelerated Vertex Deformation",
+  "license": "AGPL-3.0-only",
+  "author": "Dibyajyoti Rout",
+  "homepage": "https://github.com/code-dibyajyotirout/handforge#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/code-dibyajyotirout/handforge.git"
+  },
+  "bugs": {
+    "url": "https://github.com/code-dibyajyotirout/handforge/issues"
+  },
+  "keywords": [
+    "spatial-computing",
+    "3d-sculpting",
+    "webgpu",
+    "threejs",
+    "mediapipe",
+    "hand-tracking",
+    "computer-vision",
+    "animation-timeline",
+    "agpl"
+  ],
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "node node_modules/typescript/lib/tsc.js --noEmit"
+  },
+  "dependencies": {
+    "@mediapipe/tasks-vision": "^0.10.35",
+    "@types/three": "^0.185.0",
+    "next": "16.2.10",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "three": "^0.185.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "typescript": "^5"
+  }
+}
