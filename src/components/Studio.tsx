@@ -22,6 +22,8 @@ export default function Studio() {
   const [activeMat, setActiveMat] = useState("clay");
   const [mobileTab, setMobileTab] = useState<"canvas" | "settings" | "vision">("canvas");
   const [spatialActive, setSpatialActive] = useState(true);
+  const [dualHandMode, setDualHandMode] = useState(false);
+  const dualHandModeRef = useRef(false);
   const stateRef = useRef({
     handDetected: false,
     isMouseDown: false,
@@ -462,7 +464,8 @@ export default function Studio() {
     }
 
     s.handDetected = true;
-    const hands = data.hands.allLandmarks;
+    const isDual = dualHandModeRef.current;
+    const hands = isDual ? data.hands.allLandmarks : data.hands.allLandmarks.slice(0, 1);
     let overall = data.pose?.landmarks ? "pose" : "hover";
 
     for (let h = 0; h < 2; h++) {
@@ -506,7 +509,24 @@ export default function Studio() {
 
       let hs = "hover";
       if (h === 0) {
-        if (g.state === "smooth") {
+        if (!isDual && g.state === "orbit") {
+          hs = "orbit";
+          overall = "orbit";
+          if (engine.sculptMesh && s.prevHand[0].lengthSq() > 0) {
+            const dx = Math.max(-0.08, Math.min(0.08, wp.x - s.prevHand[0].x));
+            const dy = Math.max(-0.08, Math.min(0.08, wp.y - s.prevHand[0].y));
+            engine.sculptMesh.rotation.y += dx * 2.5;
+            engine.sculptMesh.rotation.x += dy * 2.5;
+            engine.gizmo?.highlightAxis(Math.abs(dx) > Math.abs(dy) ? "y" : "x");
+          }
+        } else if (!isDual && g.state === "scale") {
+          hs = "sculpt";
+          overall = "resize";
+          if (engine.sculptMesh && s.prevHand[0].lengthSq() > 0) {
+            const dy = Math.max(-0.04, Math.min(0.04, wp.y - s.prevHand[0].y));
+            engine.sculptMesh.scale.setScalar(Math.max(0.5, Math.min(2.5, engine.sculptMesh.scale.x + dy * 1.2)));
+          }
+        } else if (g.state === "smooth") {
           hs = "smooth";
           overall = "smooth";
           const pm = engine.brushMode;
@@ -861,6 +881,31 @@ export default function Studio() {
               <h3>SPATIAL VISION</h3>
               <span id="hand-status-badge" className="badge badge-warning">Waiting</span>
             </div>
+
+            {spatialActive && (
+              <div className="hand-mode-toggle">
+                <button 
+                  className={`mode-btn ${!dualHandMode ? "active" : ""}`} 
+                  onClick={() => {
+                    setDualHandMode(false);
+                    dualHandModeRef.current = false;
+                    showToast("1 Hand Mode (Ghost-Free)");
+                  }}
+                >
+                  1 Hand (Focus)
+                </button>
+                <button 
+                  className={`mode-btn ${dualHandMode ? "active" : ""}`} 
+                  onClick={() => {
+                    setDualHandMode(true);
+                    dualHandModeRef.current = true;
+                    showToast("Dual Hand Mode (Bimanual)");
+                  }}
+                >
+                  Dual Hands
+                </button>
+              </div>
+            )}
             
             <button className={`dock-btn ${spatialActive ? "active" : ""}`} style={{ marginBottom: 8, width: "100%", justifyContent: "center" }} onClick={toggleSpatialMode}>
               {spatialActive ? "Disable Spatial AI Mode" : "Enable Spatial AI Mode"}
