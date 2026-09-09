@@ -451,6 +451,8 @@ export default function Studio() {
         ProjectManager.autoSave(engine, timelineRef.current);
       }
       s.handDetected = false; s.wasSculpting = false;
+      s.prevHand[0].set(0, 0, 0);
+      s.prevHand[1].set(0, 0, 0);
       engine.updateToolVisualizer(0, new THREE.Vector3(), engine.brushRadius, "hover", false);
       engine.updateToolVisualizer(1, new THREE.Vector3(), engine.brushRadius, "hover", false);
       engine.gizmo?.resetHighlight();
@@ -465,13 +467,14 @@ export default function Studio() {
 
     for (let h = 0; h < 2; h++) {
       if (h >= hands.length) {
+        s.prevHand[h].set(0, 0, 0);
         engine.updateToolVisualizer(h, new THREE.Vector3(), engine.brushRadius, "hover", false);
         continue;
       }
       const lm = hands[h];
       const ndc = mapper.getNormalizedScreenCoords(lm[8]);
       const g = cls[h].classify(lm, mapper, h);
-      const shouldSelect = (h === 0 && (g.state === "sculpt" || g.state === "smooth"));
+      const shouldSelect = (g.state === "sculpt" || g.state === "smooth");
       let wp = engine.getSurfacePoint(ndc.x, ndc.y, shouldSelect);
       wp = mapper.filters[h].filter(wp);
       if (h === 0) updatePinchMeter(g.relativePinch);
@@ -528,23 +531,35 @@ export default function Studio() {
           hs = "orbit";
           overall = "orbit";
           if (engine.sculptMesh && s.prevHand[1].lengthSq() > 0) {
-            const dx = wp.x - s.prevHand[1].x, dy = wp.y - s.prevHand[1].y;
+            const dx = Math.max(-0.08, Math.min(0.08, wp.x - s.prevHand[1].x));
+            const dy = Math.max(-0.08, Math.min(0.08, wp.y - s.prevHand[1].y));
             engine.sculptMesh.rotation.y += dx * 2.5;
             engine.sculptMesh.rotation.x += dy * 2.5;
             engine.gizmo?.highlightAxis(Math.abs(dx) > Math.abs(dy) ? "y" : "x");
           }
-        } else if (g.state === "scale" || g.state === "sculpt") {
+        } else if (g.state === "scale") {
           hs = "sculpt";
           overall = "resize";
           if (engine.sculptMesh && s.prevHand[1].lengthSq() > 0) {
-            const dy = wp.y - s.prevHand[1].y;
-            engine.sculptMesh.scale.setScalar(Math.max(0.3, Math.min(3, engine.sculptMesh.scale.x + dy * 1.5)));
+            const dy = Math.max(-0.04, Math.min(0.04, wp.y - s.prevHand[1].y));
+            engine.sculptMesh.scale.setScalar(Math.max(0.5, Math.min(2.5, engine.sculptMesh.scale.x + dy * 1.2)));
           }
+        } else if (g.state === "sculpt") {
+          // Both hands can sculpt naturally without unintended resizing
+          hs = "sculpt";
+          overall = "sculpt";
+          if (!s.wasSculpting) {
+            engine.saveSnapshot();
+            s.wasSculpting = true;
+          }
+          engine.sculptStroke(wp);
         } else {
           engine.gizmo?.resetHighlight();
         }
       }
-      s.prevHand[h].copy(wp);
+      if (Number.isFinite(wp.x) && Number.isFinite(wp.y) && Number.isFinite(wp.z)) {
+        s.prevHand[h].copy(wp);
+      }
       engine.updateToolVisualizer(h, wp, engine.brushRadius, hs, true);
     }
     updateGestureUI(overall, hands.length);
