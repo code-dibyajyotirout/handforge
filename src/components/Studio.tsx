@@ -43,8 +43,11 @@ export default function Studio() {
   const $ = useCallback((id: string) => document.getElementById(id), []);
 
   /* ─── Init ─── */
+  const initializedRef = useRef(false);
   useEffect(() => {
+    if (initializedRef.current) return;
     if (!canvasRef.current) return;
+    initializedRef.current = true;
 
     const engine = new SculptingEngine(canvasRef.current);
     engineRef.current = engine;
@@ -214,8 +217,10 @@ export default function Studio() {
 
       if (activeTouches.size === 1) {
         const rect = dom.getBoundingClientRect();
+        if (rect.width <= 0 || rect.height <= 0) return;
         const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
         const ny = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+        if (!Number.isFinite(nx) || !Number.isFinite(ny)) return;
 
         if (s.isDraggingGizmo && s.activeGizmoAxis && engine.selectedPart && engine.gizmo) {
           const centerWorld = engine.gizmo.group.position;
@@ -636,6 +641,13 @@ export default function Studio() {
       // Turn off
       trackerRef.current?.dispose();
       trackerRef.current = null;
+      stateRef.current.handDetected = false;
+      stateRef.current.wasSculpting = false;
+      stateRef.current.isMouseDown = false;
+      mapperRef.current?.filters[0].reset();
+      mapperRef.current?.filters[1].reset();
+      engineRef.current?.updateToolVisualizer(0, new THREE.Vector3(), engineRef.current.brushRadius, "hover", false);
+      engineRef.current?.updateToolVisualizer(1, new THREE.Vector3(), engineRef.current.brushRadius, "hover", false);
       $("webcam-placeholder")?.classList.remove("hidden");
       const ph = $("webcam-placeholder");
       if (ph) ph.innerHTML = "<span>Camera Offline — Mouse, Keyboard & Touch Active</span>";
