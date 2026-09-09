@@ -557,15 +557,15 @@ export default function Studio() {
     if (handCount === 0) {
       if (state === "fallback") {
         badge.textContent = "Offline"; badge.className = "badge badge-warning";
-        card.className = "gesture-card state-hover"; icon.textContent = "[FALLBACK]";
+        card.className = "gesture-card state-hover"; icon.textContent = "OFF";
         title.textContent = "FALLBACK ACTIVE"; desc.textContent = "Mouse, keyboard, and touch controls fully active";
       } else if (state === "pose") {
         badge.textContent = "Pose Tracking"; badge.className = "badge badge-info";
-        card.className = "gesture-card state-pose"; icon.textContent = "[RIG]";
+        card.className = "gesture-card state-pose"; icon.textContent = "RIG";
         title.textContent = "BODY RIGGING"; desc.textContent = "Live body skeletal coordinates driving mesh shape";
       } else {
         badge.textContent = "Wave Hands"; badge.className = "badge badge-warning";
-        card.className = "gesture-card state-hover"; icon.textContent = "[SCAN]";
+        card.className = "gesture-card state-hover"; icon.textContent = "SCAN";
         title.textContent = "WAITING"; desc.textContent = "Place hands in frame to sculpt, or use mouse";
       }
       return;
@@ -573,12 +573,12 @@ export default function Studio() {
 
     badge.textContent = handCount === 2 ? "Dual Hands" : "1 Hand"; badge.className = "badge badge-success";
     const map: Record<string, [string, string, string, string]> = {
-      resize: ["state-sculpt", "[SCALE]", "SPATIAL RESIZE", "Pinch Hand 2 to scale"],
-      orbit: ["state-sculpt", "[ORBIT]", "SPATIAL ORBIT", "Fist on Hand 2 — rotating model"],
-      sculpt: ["state-sculpt", "[SCULPT]", "SCULPTING", "Deforming mesh"],
-      smooth: ["state-smooth", "[SMOOTH]", "SMOOTHING", "Laplacian smooth pass"],
-      pose: ["state-pose", "[RIG]", "BODY RIG ACTIVE", "Skeletal movement deforming model"],
-      hover: ["state-hover", "[HOVER]", "HOVER", "Hand 1 sculpts, Hand 2 transforms"],
+      resize: ["state-sculpt", "SCALE", "SPATIAL RESIZE", "Pinch Hand 2 to scale"],
+      orbit: ["state-sculpt", "ORBIT", "SPATIAL ORBIT", "Fist on Hand 2 — rotating model"],
+      sculpt: ["state-sculpt", "SCULPT", "SCULPTING", "Deforming mesh"],
+      smooth: ["state-smooth", "SMOOTH", "SMOOTHING", "Laplacian smooth pass"],
+      pose: ["state-pose", "RIG", "BODY RIG ACTIVE", "Skeletal movement deforming model"],
+      hover: ["state-hover", "HOVER", "HOVER", "Hand 1 sculpts, Hand 2 transforms"],
     };
     const [cls, ic, t, d] = map[state] || map.hover;
     card.className = `gesture-card ${cls}`; icon.textContent = ic; title.textContent = t; desc.textContent = d;
@@ -753,7 +753,7 @@ export default function Studio() {
           <div className="panel-section">
             <h3>BRUSH TOOLS</h3>
             <div className="tool-grid">
-              {[["push","","Push"],["pull","","Carve"],["smooth","","Smooth"],["inflate","","Flatten"],["flatten","","Flatten"],["crease","","Crease"]].map(([mode, icon, name]) => (
+              {[["push","","Push"],["pull","","Carve"],["smooth","","Smooth"],["inflate","","Inflate"],["flatten","","Flatten"],["crease","","Crease"]].map(([mode, icon, name]) => (
                 <button key={mode} className={`tool-btn ${activeBrush === mode ? "active" : ""}`} onClick={() => handleBrush(mode)}>
                   {icon && <span className="tool-icon">{icon}</span>}
                   <span className="tool-name">{name}</span>
@@ -855,7 +855,7 @@ export default function Studio() {
           <div className="panel-section">
             <h3>GESTURE MONITOR</h3>
             <div id="gesture-card" className="gesture-card state-hover">
-              <div className="gesture-icon" id="gesture-icon">[HOVER]</div>
+              <div className="gesture-icon" id="gesture-icon">HOVER</div>
               <div><div className="gesture-title" id="gesture-title">HOVER</div><div className="gesture-desc" id="gesture-desc">Hand 1 sculpts, Hand 2 transforms</div></div>
             </div>
             <div className="meter-container">
