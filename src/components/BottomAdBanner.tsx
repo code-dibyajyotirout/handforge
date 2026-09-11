@@ -31,7 +31,7 @@ export default function BottomAdBanner({
     }
   }, [slot]);
 
-  if (!isVisible) return null;
+  if (!isVisible || !slot) return null;
 
   return (
     <div style={{
@@ -80,33 +80,14 @@ export default function BottomAdBanner({
           ✕
         </button>
 
-        {slot ? (
-          <ins
-            className="adsbygoogle"
-            style={{ display: "inline-block", width: "728px", height: "90px" }}
-            data-ad-client={client}
-            data-ad-slot={slot}
-            data-ad-format="auto"
-            data-full-width-responsive="true"
-          />
-        ) : (
-          <div style={{
-            width: "728px",
-            maxWidth: "100%",
-            height: "90px",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "rgba(255, 255, 255, 0.3)",
-            fontSize: "0.78rem",
-            letterSpacing: "1px",
-            gap: "4px"
-          }}>
-            <span style={{ fontWeight: 600, color: "rgba(0, 242, 254, 0.6)" }}>GOOGLE ADSENSE CONTAINER (728x90)</span>
-            <span>Publisher: {client}</span>
-          </div>
-        )}
+        <ins
+          className="adsbygoogle"
+          style={{ display: "inline-block", width: "728px", height: "90px" }}
+          data-ad-client={client}
+          data-ad-slot={slot}
+          data-ad-format="auto"
+          data-full-width-responsive="true"
+        />
       </div>
     </div>
   );
