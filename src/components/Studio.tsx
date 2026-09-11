@@ -7,6 +7,7 @@ import { CoordinateMapper } from "@/lib/math/CoordinateMapper";
 import { GestureClassifier } from "@/lib/math/GestureClassifier";
 import { ProjectManager } from "@/lib/engine/ProjectManager";
 import { AnimTimeline } from "@/lib/engine/AnimTimeline";
+import BottomAdBanner from "./BottomAdBanner";
 
 export default function Studio() {
   const canvasRef = useRef<HTMLDivElement>(null);
@@ -949,6 +950,11 @@ export default function Studio() {
             </ul>
           </div>
         </aside>
+
+        {/* Ad Banner Dock */}
+        <div className="studio-ad-dock">
+          <BottomAdBanner client="ca-pub-6920661391833487" />
+        </div>
 
         {/* Bottom Dock */}
         <footer className="bottom-dock glass-panel">

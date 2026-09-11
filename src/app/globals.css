@@ -344,3 +344,23 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
 nextjs-portal, #__next-prerender-indicator {
   display: none !important;
 }
+
+/* Floating Bottom Ad Dock */
+.studio-ad-dock {
+  position: absolute;
+  bottom: 86px;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: auto;
+  z-index: 50;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 95vw;
+}
+@media (max-width: 1024px) {
+  .studio-ad-dock {
+    bottom: 78px;
+  }
+}
+
