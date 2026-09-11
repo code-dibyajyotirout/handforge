@@ -948,6 +948,11 @@ export default function Studio() {
               <li><span className="guide-icon">👍</span><div className="guide-text"><strong>Thumbs Up:</strong> Undo last sculpt stroke</div></li>
               <li><span className="guide-icon">🤟</span><div className="guide-text"><strong>3-Fingers:</strong> Cycle active brush tool</div></li>
             </ul>
+            <div style={{ display: "flex", gap: "10px", justifyContent: "center", marginTop: "12px", fontSize: "0.68rem" }}>
+              <a href="/privacy-policy" target="_blank" rel="noopener noreferrer" style={{ color: "var(--text-muted)", textDecoration: "none" }}>Privacy Policy</a>
+              <span style={{ color: "rgba(255,255,255,0.2)" }}>•</span>
+              <a href="/terms" target="_blank" rel="noopener noreferrer" style={{ color: "var(--text-muted)", textDecoration: "none" }}>Terms of Service</a>
+            </div>
           </div>
         </aside>
 
